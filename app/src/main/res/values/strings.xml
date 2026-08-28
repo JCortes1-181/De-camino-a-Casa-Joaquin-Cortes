@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">De camino a Casa</string>
+    <string name="welcome_message">De camino a casa</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="register_button">Registrarse</string>
 </resources>
