@@ -3,4 +3,10 @@
     <string name="welcome_message">De camino a casa</string>
     <string name="login_button">Iniciar sesión</string>
     <string name="register_button">Registrarse</string>
+    <string name="new_user_title">Nuevo usuario</string>
+    <string name="community_subtitle">Sé parte de la comunidad</string>
+    <string name="hint_name">Nombre</string>
+    <string name="hint_phone">Teléfono</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="welcome_back">Bienvenido</string>
 </resources>
