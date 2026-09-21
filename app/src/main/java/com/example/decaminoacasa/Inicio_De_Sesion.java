@@ -1,6 +1,7 @@
 package com.example.decaminoacasa;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +21,10 @@ public class Inicio_De_Sesion extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Button btnBack = findViewById(R.id.btn_login_back);
+        btnBack.setOnClickListener(v -> finish());
+
+        Button btnSubmit = findViewById(R.id.btn_login_submit);
+        btnSubmit.setOnClickListener(v -> finish());
     }
 }

@@ -9,4 +9,6 @@
     <string name="hint_phone">Teléfono</string>
     <string name="hint_password">Contraseña</string>
     <string name="welcome_back">Bienvenido</string>
+    <string name="back_button">Volver</string>
+    <string name="help_message">Ayúdanos a volver a casa</string>
 </resources>

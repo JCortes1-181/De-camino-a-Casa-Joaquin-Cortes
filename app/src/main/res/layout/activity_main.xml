@@ -26,16 +26,14 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ayudanos a volver a casa"
+        android:text="@string/help_message"
         android:textColor="@color/primary_text"
         android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.549"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.483"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_marginTop="24dp"
         tools:ignore="TextSizeCheck" />
 
     <Button
@@ -43,31 +41,30 @@
         android:layout_width="310dp"
         android:layout_height="97dp"
         android:text="@string/login_button"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.586" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:layout_marginTop="32dp" />
 
     <Button
         android:id="@+id/BTN_registrarse"
         android:layout_width="231dp"
         android:layout_height="76dp"
         android:text="@string/register_button"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BTN_iniciarsesion"
-        app:layout_constraintVertical_bias="0.227" />
+        android:layout_marginTop="16dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="221dp"
         android:layout_height="211dp"
+        android:contentDescription="@null"
         app:srcCompat="@drawable/picsvg_download"
-        tools:layout_editor_absoluteX="92dp"
-        tools:layout_editor_absoluteY="108dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:layout_marginTop="32dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

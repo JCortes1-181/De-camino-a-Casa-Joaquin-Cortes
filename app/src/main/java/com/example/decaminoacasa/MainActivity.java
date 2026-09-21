@@ -1,6 +1,8 @@
 package com.example.decaminoacasa;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,18 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+        Button btnLogin = findViewById(R.id.BTN_iniciarsesion);
+        Button btnRegister = findViewById(R.id.BTN_registrarse);
+
+        btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Inicio_De_Sesion.class);
+            startActivity(intent);
+        });
+
+        btnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, De_Camino_Al_Registro.class);
+            startActivity(intent);
         });
     }
 }

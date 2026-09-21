@@ -1,6 +1,7 @@
 package com.example.decaminoacasa;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +21,11 @@ public class De_Camino_Al_Registro extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button btnBack = findViewById(R.id.btn_register_back);
+        btnBack.setOnClickListener(v -> finish());
+
+        Button btnRegister = findViewById(R.id.btn_register);
+        btnRegister.setOnClickListener(v -> finish());
     }
 }
