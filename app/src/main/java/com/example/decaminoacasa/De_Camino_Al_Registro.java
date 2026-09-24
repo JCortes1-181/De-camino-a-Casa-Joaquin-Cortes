@@ -1,7 +1,10 @@
 package com.example.decaminoacasa;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +25,28 @@ public class De_Camino_Al_Registro extends AppCompatActivity {
             return insets;
         });
 
+        EditText etName = findViewById(R.id.et_name);
+        EditText etPassword = findViewById(R.id.et_password);
+        EditText etPhone = findViewById(R.id.et_phone);
+
         Button btnBack = findViewById(R.id.btn_register_back);
         btnBack.setOnClickListener(v -> finish());
 
         Button btnRegister = findViewById(R.id.btn_register);
-        btnRegister.setOnClickListener(v -> finish());
+        btnRegister.setOnClickListener(v -> {
+            String name = etName.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+            String phone = etPhone.getText().toString().trim();
+
+            if (name.isEmpty() || password.isEmpty() || phone.isEmpty()) {
+                Toast.makeText(De_Camino_Al_Registro.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(De_Camino_Al_Registro.this, "¡Registro exitoso!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(De_Camino_Al_Registro.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
