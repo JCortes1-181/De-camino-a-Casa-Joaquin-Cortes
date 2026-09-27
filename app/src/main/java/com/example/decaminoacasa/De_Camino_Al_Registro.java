@@ -39,9 +39,9 @@ public class De_Camino_Al_Registro extends AppCompatActivity {
             String phone = etPhone.getText().toString().trim();
 
             if (name.isEmpty() || password.isEmpty() || phone.isEmpty()) {
-                Toast.makeText(De_Camino_Al_Registro.this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(De_Camino_Al_Registro.this, "completar todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(De_Camino_Al_Registro.this, "¡Registro exitoso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(De_Camino_Al_Registro.this, "Registro completado", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(De_Camino_Al_Registro.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

@@ -29,6 +29,10 @@
             android:name=".Inicio_De_Sesion"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Pantalla_inicio"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
