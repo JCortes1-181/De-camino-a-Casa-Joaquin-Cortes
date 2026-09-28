@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_text">#1976D2</color> <!-- Un tono de azul -->
+    <color name="header_teal">#1E828C</color>
 </resources>

@@ -11,4 +11,5 @@
     <string name="welcome_back">Bienvenido</string>
     <string name="back_button">Volver</string>
     <string name="help_message">Ayúdanos a volver a casa</string>
+    <string name="search_hint">Ajustar búsqueda</string>
 </resources>
