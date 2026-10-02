@@ -31,6 +31,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/header_background" />
 
+    <ImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_circle_gradient"
+        android:contentDescription="@string/profile_desc"
+        android:padding="8dp"
+        android:src="@drawable/ic_user_silhouette"
+        app:layout_constraintBottom_toBottomOf="@id/tv_header_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_header_title" />
 
     <EditText
         android:id="@+id/et_search"
@@ -55,14 +67,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_header_title" />
 
-
-    <View
-        android:id="@+id/footer_background"
+    <!-- Bottom Footer Bar with 3 Buttons -->
+    <LinearLayout
+        android:id="@+id/footer_bar"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@color/header_teal"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_footer_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/desc_location"
+            android:src="@drawable/ic_map_pin_dog"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_footer_middle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/desc_search_pet"
+            android:src="@drawable/ic_search_house"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/btn_footer_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/desc_chat"
+            android:src="@drawable/ic_chat"
+            app:tint="@color/white" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
