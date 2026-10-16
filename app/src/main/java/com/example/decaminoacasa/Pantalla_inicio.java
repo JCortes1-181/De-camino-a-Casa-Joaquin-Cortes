@@ -30,9 +30,14 @@ public class Pantalla_inicio extends AppCompatActivity {
             return insets;
         });
 
+        String username = getIntent().getStringExtra("username");
+        if (username == null) username = "Joaquín";
+        String finalUsername = username;
+
         ImageView ivProfile = findViewById(R.id.iv_profile);
         ivProfile.setOnClickListener(v -> {
             Intent intent = new Intent(Pantalla_inicio.this, Perfil_Usuario.class);
+            intent.putExtra("username", finalUsername);
             startActivity(intent);
         });
 

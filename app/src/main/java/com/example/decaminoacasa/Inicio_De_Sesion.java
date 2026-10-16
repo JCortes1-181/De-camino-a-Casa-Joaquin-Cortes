@@ -12,7 +12,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Clases.Usuario;
+import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
+
 public class Inicio_De_Sesion extends AppCompatActivity {
+
+    private UsuarioDB usuarioDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,8 @@ public class Inicio_De_Sesion extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        usuarioDB = new UsuarioDB(this);
 
         EditText etUsername = findViewById(R.id.et_login_username);
         EditText etPassword = findViewById(R.id.et_login_password);
@@ -38,11 +45,20 @@ public class Inicio_De_Sesion extends AppCompatActivity {
 
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(Inicio_De_Sesion.this, "Por favor ingresa un usuario y una contraseña", Toast.LENGTH_SHORT).show();
-            } else if ("joaquin".equalsIgnoreCase(username) && "12345".equals(password)) {
+            } else if (("joaquin".equalsIgnoreCase(username) && "12345".equals(password)) || usuarioDB.validarUsuario(username, password)) {
                 Toast.makeText(Inicio_De_Sesion.this, "Bienvenido", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Inicio_De_Sesion.this, Pantalla_inicio.class);
-                startActivity(intent);
-                finish();
+
+                Usuario u = usuarioDB.obtenerUsuarioPorNombre(username);
+                if (("admin".equalsIgnoreCase(username) && "admin123".equals(password)) || (u != null && "admin".equalsIgnoreCase(u.getRol()))) {
+                    Intent intent = new Intent(Inicio_De_Sesion.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(Inicio_De_Sesion.this, Pantalla_inicio.class);
+                    intent.putExtra("username", username);
+                    startActivity(intent);
+                    finish();
+                }
             } else {
                 Toast.makeText(Inicio_De_Sesion.this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
             }

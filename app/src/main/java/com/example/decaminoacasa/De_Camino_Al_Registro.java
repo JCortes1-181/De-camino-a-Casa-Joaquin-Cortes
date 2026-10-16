@@ -12,7 +12,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Clases.Usuario;
+import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
+
 public class De_Camino_Al_Registro extends AppCompatActivity {
+
+    private UsuarioDB usuarioDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,8 @@ public class De_Camino_Al_Registro extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        usuarioDB = new UsuarioDB(this);
 
         EditText etName = findViewById(R.id.et_name);
         EditText etPassword = findViewById(R.id.et_password);
@@ -41,11 +48,17 @@ public class De_Camino_Al_Registro extends AppCompatActivity {
             if (name.isEmpty() || password.isEmpty() || phone.isEmpty()) {
                 Toast.makeText(De_Camino_Al_Registro.this, "completar todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(De_Camino_Al_Registro.this, "Registro completado", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(De_Camino_Al_Registro.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                Usuario usuario = new Usuario(name, phone, password);
+                boolean inserted = usuarioDB.insertarUsuario(usuario);
+                if (inserted) {
+                    Toast.makeText(De_Camino_Al_Registro.this, "Registro completado en Base de Datos", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(De_Camino_Al_Registro.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(De_Camino_Al_Registro.this, "Error al registrar usuario", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
