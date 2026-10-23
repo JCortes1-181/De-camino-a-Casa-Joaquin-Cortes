@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="32dp">
 
-        <!-- Top Header Background -->
+
         <View
             android:id="@+id/header_detail_bg"
             android:layout_width="0dp"
@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_detail_back" />
 
-        <!-- Pet Circular Avatar -->
+
         <ImageView
             android:id="@+id/iv_detail_avatar"
             android:layout_width="100dp"
@@ -65,7 +65,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_header_title" />
 
-        <!-- Pet Name & Subtitle -->
+
         <TextView
             android:id="@+id/tv_detail_pet_name"
             android:layout_width="wrap_content"
@@ -91,7 +91,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_detail_pet_name" />
 
-        <!-- Card: Information & Details -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_info"
             android:layout_width="0dp"
@@ -132,7 +131,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Card: GPS Location & Map Preview -->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_location"
             android:layout_width="0dp"
@@ -156,7 +154,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UBICACIÓN GPS ENCONTRADA"
+                    android:text="UBICACIÓN GPS EN EL MAPA"
                     android:textColor="#757575"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -168,23 +166,19 @@
                     android:layout_marginTop="8dp"
                     android:text="Lat: -33.4489, Lng: -70.6693"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <!-- Simulated Map Preview View -->
+
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_marginTop="12dp"
-                    android:background="#B2DFDB">
+                    android:layout_height="220dp"
+                    android:layout_marginTop="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="📍 Ubicación marcada en el Mapa"
-                        android:textColor="#004D40"
-                        android:textStyle="bold" />
+                    <WebView
+                        android:id="@+id/wv_detail_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
                 </FrameLayout>
 
             </LinearLayout>
