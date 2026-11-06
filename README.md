@@ -68,7 +68,7 @@ app/
 
 1. **Clona el repositorio:**
    ```bash
-   git clone https://github.com
+   git clone [https://github.com](https://github.com/JCortes1-181/De-camino-a-Casa-Joaquin-Cortes/tree/master)
    ```
 2. **Abre el proyecto** en [Android Studio](https://android.com) (Electric Eel o superior recomendado).
 3. Sincroniza el proyecto con los archivos Gradle (`File -> Sync Project with Gradle Files`).
