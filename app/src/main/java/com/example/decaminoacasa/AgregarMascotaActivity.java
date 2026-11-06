@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Modelo.MascotaDB;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
@@ -29,6 +30,7 @@ public class AgregarMascotaActivity extends AppCompatActivity {
     private EditText etLocation;
     private WebView wvMapPicker;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
+    private String username;
 
     private double currentLat = -33.4489;
     private double currentLng = -70.6693;
@@ -43,6 +45,9 @@ public class AgregarMascotaActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        username = getIntent().getStringExtra("username");
+        if (username == null) username = "joaquin";
 
         EditText etName = findViewById(R.id.et_pet_name);
         EditText etColor = findViewById(R.id.et_pet_color);
@@ -87,11 +92,15 @@ public class AgregarMascotaActivity extends AppCompatActivity {
             if (name.isEmpty() || color.isEmpty() || info.isEmpty() || location.isEmpty()) {
                 Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
             } else {
-                Mascota mascota = new Mascota(name, color, info, location);
-                MascotaRepository.agregarMascota(mascota);
-                Toast.makeText(this, "¡Mascota agregada con éxito!", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
-                finish();
+                Mascota mascota = new Mascota(name, color, info, location, username);
+                boolean guardado = new MascotaDB(this).insertarMascota(mascota);
+                if (guardado) {
+                    Toast.makeText(this, "¡Aviso de mascota guardado en Base de Datos!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Error al guardar la mascota", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -120,7 +129,6 @@ public class AgregarMascotaActivity extends AppCompatActivity {
                         loadPickerMap(currentLat, currentLng);
                         Toast.makeText(this, "¡Ubicación GPS real obtenida!", Toast.LENGTH_SHORT).show();
                     } else {
-                        // Fallback to last location
                         fusedLocationClient.getLastLocation().addOnSuccessListener(this, lastLoc -> {
                             if (lastLoc != null) {
                                 currentLat = lastLoc.getLatitude();
@@ -165,15 +173,11 @@ public class AgregarMascotaActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, requiredPermissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                obtenerCooperadasGpsIfAllowed();
+                obtenerCoordenadasGps();
             } else {
                 loadPickerMap(currentLat, currentLng);
                 Toast.makeText(this, "Usando ubicación por defecto (permiso denegado)", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    private void obtenerCooperadasGpsIfAllowed() {
-        obtenerCoordenadasGps();
     }
 }

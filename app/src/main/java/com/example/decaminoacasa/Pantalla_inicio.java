@@ -10,14 +10,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Modelo.MascotaDB;
+
 import java.util.List;
 
 public class Pantalla_inicio extends AppCompatActivity {
+
+    private MascotaDB mascotaDB;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +36,11 @@ public class Pantalla_inicio extends AppCompatActivity {
             return insets;
         });
 
-        String username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra("username");
         if (username == null) username = "Joaquín";
         String finalUsername = username;
+
+        mascotaDB = new MascotaDB(this);
 
         ImageView ivProfile = findViewById(R.id.iv_profile);
         ivProfile.setOnClickListener(v -> {
@@ -49,6 +57,7 @@ public class Pantalla_inicio extends AppCompatActivity {
         btnMiddle.setOnClickListener(v -> Toast.makeText(this, "Pantalla de inicio", Toast.LENGTH_SHORT).show());
         btnRight.setOnClickListener(v -> {
             Intent intent = new Intent(Pantalla_inicio.this, AgregarMascotaActivity.class);
+            intent.putExtra("username", finalUsername);
             startActivityForResult(intent, 100);
         });
 
@@ -73,13 +82,13 @@ public class Pantalla_inicio extends AppCompatActivity {
         LinearLayout container = findViewById(R.id.container_pets);
         container.removeAllViews();
 
-        List<Mascota> mascotas = MascotaRepository.getListaMascotas();
+        List<Mascota> mascotas = mascotaDB.obtenerMascotasActivas();
         for (Mascota mascota : mascotas) {
             View card = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, container, false);
             TextView text1 = card.findViewById(android.R.id.text1);
             TextView text2 = card.findViewById(android.R.id.text2);
 
-            text1.setText("🐾 " + mascota.getNombre() + " (" + mascota.getColor() + ")");
+            text1.setText("🐾 " + mascota.getNombre() + " (" + mascota.getColor() + ") - Creado por: " + mascota.getUsuarioCreador());
             text2.setText("📍 " + mascota.getUbicacionGps());
 
             card.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
@@ -95,6 +104,28 @@ public class Pantalla_inicio extends AppCompatActivity {
                 Intent intent = new Intent(Pantalla_inicio.this, DetalleMascotaActivity.class);
                 intent.putExtra("mascota", mascota);
                 startActivity(intent);
+            });
+
+            card.setOnLongClickListener(v -> {
+                if (username.equalsIgnoreCase(mascota.getUsuarioCreador()) || username.equalsIgnoreCase("admin")) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("Gestionar Aviso")
+                        .setMessage("¿Deseas quitar/desactivar este aviso de mascota?")
+                        .setPositiveButton("Sí, quitar", (dialog, which) -> {
+                            boolean des = mascotaDB.desactivarMascota(mascota.getId());
+                            if (des) {
+                                Toast.makeText(this, "Aviso desactivado con éxito", Toast.LENGTH_SHORT).show();
+                                cargarMascotas();
+                            } else {
+                                Toast.makeText(this, "Error al desactivar el aviso", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+                } else {
+                    Toast.makeText(this, "Solo el creador o admin pueden quitar este aviso", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             });
 
             container.addView(card);
