@@ -1,8 +1,8 @@
-# [Nombre de la Aplicación / Proyecto]
+# [De Camino a Casa]
 
 <div align="center">
-  <img width="350" height="350" alt="a-cartoon-dog-with-a-collar-on-a-blue-background-png" src="https://github.com/user-attachments/assets/39917582-2f7f-4739-b90a-55d724950dca" />
-  <img src="path/to/logo.png" alt="Logo" width="120" height="120">
+ 
+  <img src=" <img width="350" height="350" alt="a-cartoon-dog-with-a-collar-on-a-blue-background-png" src="https://github.com/user-attachments/assets/39917582-2f7f-4739-b90a-55d724950dca" />" alt="Logo" width="120" height="120">
 
   <p><strong>Breve descripción de una o dos líneas sobre lo que hace tu aplicación Android.</strong></p>
 
