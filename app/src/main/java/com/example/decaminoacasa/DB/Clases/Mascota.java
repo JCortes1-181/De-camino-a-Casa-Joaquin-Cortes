@@ -1,4 +1,4 @@
-package com.example.decaminoacasa;
+package com.example.decaminoacasa.DB.Clases;
 
 import java.io.Serializable;
 

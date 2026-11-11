@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.decaminoacasa.DB.DBconexion;
-import com.example.decaminoacasa.Mascota;
+import com.example.decaminoacasa.DB.Clases.Mascota;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.example.decaminoacasa;
 
+import com.example.decaminoacasa.DB.Clases.Mascota;
+
 import java.util.ArrayList;
 import java.util.List;
 

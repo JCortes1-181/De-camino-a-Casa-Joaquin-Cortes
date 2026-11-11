@@ -11,6 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Clases.Mascota;
+
 public class DetalleMascotaActivity extends AppCompatActivity {
 
     private double currentLat = -33.4489;
