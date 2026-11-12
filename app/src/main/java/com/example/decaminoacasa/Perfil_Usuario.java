@@ -17,8 +17,18 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.decaminoacasa.DB.Clases.Usuario;
 import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
 
+/**
+ * esta pantalla muestra los datos del perfil del usuario que esta en sesión, permitiendo
+ * ver su información personal o cerrar la sesión actual de una forma segura.
+ */
 public class Perfil_Usuario extends AppCompatActivity {
 
+    /**
+     * Se ejecuta al crear la activity, configurando la interfaz visual, la protección contra capturas de pantalla,
+     * los eventos de los botones para volver o cerrar sesión, y cargando los datos del usuario desde la base de datos.
+     *
+     * @param savedInstanceState Estado guardado anterior de la activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

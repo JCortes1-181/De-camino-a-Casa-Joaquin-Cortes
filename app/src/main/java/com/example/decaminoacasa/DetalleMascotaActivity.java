@@ -13,11 +13,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.decaminoacasa.DB.Clases.Mascota;
 
+/**
+ * esta pantalla muestra la información de la mascota seleccionada,
+ * incluyendo su descripcion y un mapa interactivo con el gps.
+ */
 public class DetalleMascotaActivity extends AppCompatActivity {
 
     private double currentLat = -33.4489;
     private double currentLng = -70.6693;
 
+    /**
+     * Se ejecuta al crear la activity, configurando la interfaz visual, recuperando el objeto
+     * {@link Mascota} enviado por Intent y cargando su ubicación en el mapa.
+     *
+     * @param savedInstanceState Estado guardado pasado de la activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +70,14 @@ public class DetalleMascotaActivity extends AppCompatActivity {
         loadMapInWebView(wvMap, currentLat, currentLng);
     }
 
+    /**
+     * Carga y renderiza un mapa interactivo que utiliza Leaflet dentro de un WebView,
+     * ubicando un marcador en las coordenadas de la mascota que puso el dueño.
+     *
+     * @param wv Instancia del WebView donde se mostrará el mapa.
+     * @param lat Latitud del punto de ubicación.
+     * @param lng Longitud del punto de ubicación.
+     */
     private void loadMapInWebView(WebView wv, double lat, double lng) {
         String htmlMap = "<!DOCTYPE html><html><head>" +
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +

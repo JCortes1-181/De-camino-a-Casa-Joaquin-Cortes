@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+/**
+ * esto es la clase que se encarga de gestionar la conexión, la creación y la actualización de la base de datos SQLite local de la app.
+ */
 public class DBconexion extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "DB_CaminoACasa.db";
@@ -29,10 +32,20 @@ public class DBconexion extends SQLiteOpenHelper {
     public static final String COLUMN_MASCOTA_CREADOR = "usuario_creador";
     public static final String COLUMN_MASCOTA_ESTADO = "estado";
 
+    /**
+     * Constructor para iniciar la conexión con la base de datos de SQLite.
+     *
+     * @param context Contexto de la aplicación o la activity actual.
+     */
     public DBconexion(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    /**
+     * Se ejecuta una unica vez al crear la base de datos, generando las tablas e insertando datos por defecto.
+     *
+     * @param db Instancia de la base de datos SQLite.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTableUsuarios = "CREATE TABLE " + TABLE_USUARIOS + " (" +
@@ -71,6 +84,13 @@ public class DBconexion extends SQLiteOpenHelper {
         db.insert(TABLE_USUARIOS, null, cvAdmin);
     }
 
+    /**
+     * Se ejecuta cuando se cambia la versión de la base de datos, se elimina las tablas anteriores y las vuelve a recrear.
+     *
+     * @param db Instancia de la base de datos SQLite.
+     * @param oldVersion Versión anterior de la base de datos.
+     * @param newVersion Nueva versión de la base de datos.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USUARIOS);

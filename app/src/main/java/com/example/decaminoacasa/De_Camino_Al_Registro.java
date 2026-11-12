@@ -16,10 +16,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.decaminoacasa.DB.Clases.Usuario;
 import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
 
+/**
+ * Pantalla encargada del registro de los nuevos usuarios en la aplicación,
+ * valida los datos ingresados y los almacena en la base de datos sqlite.
+ */
 public class De_Camino_Al_Registro extends AppCompatActivity {
 
     private UsuarioDB usuarioDB;
 
+    /**
+     * Se ejecuta al crear la activity, configura la interfaz visual, tiene restricciones de seguridad
+     * y los eventos de clic para registrar un usuario o volver a la pantalla anterior.
+     *
+     * @param savedInstanceState Estado guardado anterior de la activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

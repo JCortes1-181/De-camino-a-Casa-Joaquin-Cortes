@@ -16,10 +16,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.decaminoacasa.DB.Clases.Usuario;
 import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
 
+/**
+ * Pantalla de inicio de sesión de la aplicación, encargada de autenticar la informacion
+ * del usuario en la base de datos y redirigir según su rol, siendo que por ahora hay normales y admin.
+ */
 public class Inicio_De_Sesion extends AppCompatActivity {
 
     private UsuarioDB usuarioDB;
 
+    /**
+     * Se ejecuta al crear la activity, configurando la interfaz visual, la bandera de seguridad contra capturas,
+     * y los eventos para validar el acceso o volver a la pantalla anterior.
+     *
+     * @param savedInstanceState Estado guardado anterior de la activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +59,7 @@ public class Inicio_De_Sesion extends AppCompatActivity {
                 Toast.makeText(Inicio_De_Sesion.this, "Por favor ingresa un usuario y una contraseña", Toast.LENGTH_SHORT).show();
             } else if (("joaquin".equalsIgnoreCase(username) && "12345".equals(password)) || usuarioDB.validarUsuario(username, password)) {
                 Toast.makeText(Inicio_De_Sesion.this, "Bienvenido", Toast.LENGTH_SHORT).show();
-
+                /** por ahora este es mi unico admin aun no hay una funcion para decidir quien es admin o no */
                 Usuario u = usuarioDB.obtenerUsuarioPorNombre(username);
                 if (("admin".equalsIgnoreCase(username) && "admin123".equals(password)) || (u != null && "admin".equalsIgnoreCase(u.getRol()))) {
                     Intent intent = new Intent(Inicio_De_Sesion.this, AdminActivity.class);

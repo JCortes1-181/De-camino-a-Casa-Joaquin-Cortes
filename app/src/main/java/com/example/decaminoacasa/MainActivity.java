@@ -10,8 +10,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Pantalla principal de bienvenida de la aplicación, se pueden usar las opciones
+ * para iniciar sesión o registrarse.
+ */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Se ejecuta al crear la activity, configurando la interfaz visual y los
+     * eventos de clic para redirigir al usuario hacia el inicio de sesión o al registro.
+     *
+     * @param savedInstanceState Estado guardado anterior de la activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

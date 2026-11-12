@@ -21,11 +21,20 @@ import com.example.decaminoacasa.DB.Modelo.UsuarioDB;
 
 import java.util.List;
 
+/**
+ * Pantalla de los admin para poder gestionar a los usuarios registrados en la aplicación.
+ */
 public class AdminActivity extends AppCompatActivity {
 
     private UsuarioDB usuarioDB;
     private LinearLayout containerUsers;
 
+    /**
+     * Se ejecuta al crear la activity, iniciando los componentes visuales,
+     * el manejador de la base de datos y cargando la lista de usuarios.
+     *
+     * @param savedInstanceState Esto es el estado de guardado de la activity previa que estaba en ejecución.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +60,18 @@ public class AdminActivity extends AppCompatActivity {
         cargarUsuarios();
     }
 
+    /**
+     * Se ejecuta al reanudar la activity, asegurando que la lista de usuarios se mantenga actualizada.
+     */
     @Override
     protected void onResume() {
         super.onResume();
         cargarUsuarios();
     }
 
+    /**
+     * Carga y muestra todos los usuarios de la base de datos dentro del contenedor principal.
+     */
     private void cargarUsuarios() {
         containerUsers.removeAllViews();
         List<Usuario> usuarios = usuarioDB.obtenerTodosLosUsuarios();
@@ -66,13 +81,13 @@ public class AdminActivity extends AppCompatActivity {
             TextView t1 = card.findViewById(android.R.id.text1);
             TextView t2 = card.findViewById(android.R.id.text2);
 
-            t1.setText("👤 " + u.getNombre() + " (Rol: " + u.getRol() + ")");
-            t2.setText("📞 " + u.getTelefono() + " | ID: " + u.getId());
+            t1.setText(u.getNombre() + " (Rol: " + u.getRol() + ")");
+            t2.setText(u.getTelefono() + " | ID: " + u.getId());
 
             card.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
             );
             params.setMargins(0, 0, 0, 16);
             card.setLayoutParams(params);
@@ -84,26 +99,36 @@ public class AdminActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Muestra un cuadro de diálogo con las opciones de gestión para el usuario seleccionado.
+     *
+     * @param usuario Objeto del tipo {@link Usuario} sobre el cual se realizarán las acciones.
+     */
     private void mostrarDialogoOpciones(Usuario usuario) {
         CharSequence[] opciones = {"Actualizar datos", "Borrar usuario", "Cancelar"};
         new AlertDialog.Builder(this)
-            .setTitle("Gestionar usuario: " + usuario.getNombre())
-            .setItems(opciones, (dialog, which) -> {
-                if (which == 0) {
-                    mostrarDialogoActualizar(usuario);
-                } else if (which == 1) {
-                    boolean desactivado = usuarioDB.desactivarUsuario(usuario.getId());
-                    if (desactivado) {
-                        Toast.makeText(this, "Usuario borrado (desactivado)", Toast.LENGTH_SHORT).show();
-                        cargarUsuarios();
-                    } else {
-                        Toast.makeText(this, "Error al borrar usuario", Toast.LENGTH_SHORT).show();
+                .setTitle("Gestionar usuario: " + usuario.getNombre())
+                .setItems(opciones, (dialog, which) -> {
+                    if (which == 0) {
+                        mostrarDialogoActualizar(usuario);
+                    } else if (which == 1) {
+                        boolean desactivado = usuarioDB.desactivarUsuario(usuario.getId());
+                        if (desactivado) {
+                            Toast.makeText(this, "Usuario borrado (desactivado)", Toast.LENGTH_SHORT).show();
+                            cargarUsuarios();
+                        } else {
+                            Toast.makeText(this, "Error al borrar usuario", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            })
-            .show();
+                })
+                .show();
     }
 
+    /**
+     * Muestra un cuadro de diálogo con un formulario para modificar los datos de un usuario.
+     *
+     * @param usuario Objeto del tipo {@link Usuario} el cual sus datos van a ser actualizados.
+     */
     private void mostrarDialogoActualizar(Usuario usuario) {
         View view = getLayoutInflater().inflate(R.layout.dialog_actualizar_usuario, null);
         EditText etNombre = view.findViewById(R.id.et_edit_nombre);
@@ -115,26 +140,26 @@ public class AdminActivity extends AppCompatActivity {
         etPassword.setText(usuario.getPassword());
 
         new AlertDialog.Builder(this)
-            .setTitle("Actualizar Usuario")
-            .setView(view)
-            .setPositiveButton("Guardar", (dialog, which) -> {
-                String nuevoNombre = etNombre.getText().toString().trim();
-                String nuevoTelefono = etTelefono.getText().toString().trim();
-                String nuevaPass = etPassword.getText().toString().trim();
+                .setTitle("Actualizar Usuario")
+                .setView(view)
+                .setPositiveButton("Guardar", (dialog, which) -> {
+                    String nuevoNombre = etNombre.getText().toString().trim();
+                    String nuevoTelefono = etTelefono.getText().toString().trim();
+                    String nuevaPass = etPassword.getText().toString().trim();
 
-                if (nuevoNombre.isEmpty() || nuevoTelefono.isEmpty() || nuevaPass.isEmpty()) {
-                    Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-                } else {
-                    boolean actualizado = usuarioDB.actualizarUsuario(usuario.getId(), nuevoNombre, nuevoTelefono, nuevaPass, usuario.getRol());
-                    if (actualizado) {
-                        Toast.makeText(this, "Usuario actualizado con éxito", Toast.LENGTH_SHORT).show();
-                        cargarUsuarios();
+                    if (nuevoNombre.isEmpty() || nuevoTelefono.isEmpty() || nuevaPass.isEmpty()) {
+                        Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
+                        boolean actualizado = usuarioDB.actualizarUsuario(usuario.getId(), nuevoNombre, nuevoTelefono, nuevaPass, usuario.getRol());
+                        if (actualizado) {
+                            Toast.makeText(this, "Usuario actualizado con éxito", Toast.LENGTH_SHORT).show();
+                            cargarUsuarios();
+                        } else {
+                            Toast.makeText(this, "Error al actualizar", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            })
-            .setNegativeButton("Cancelar", null)
-            .show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }
