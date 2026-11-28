@@ -12,7 +12,6 @@ public class Mascota implements Serializable {
     private String informacion;
     private String ubicacionGps;
     private String usuarioCreador;
-    private String estado;
 
     /**
      * Constructor completo para mascotas recuperadas de la base de datos.
@@ -23,16 +22,14 @@ public class Mascota implements Serializable {
      * @param informacion los Detalles adicionales.
      * @param ubicacionGps las coordenadas de gps del reporte.
      * @param usuarioCreador el usuario que registró la mascota.
-     * @param estado Estado del reporte, esto solo es importante para la base de datos, ya que es para que se vea o no y no haya que borrarlo al completo de la base de datos
      */
-    public Mascota(int id, String nombre, String color, String informacion, String ubicacionGps, String usuarioCreador, String estado) {
+    public Mascota(int id, String nombre, String color, String informacion, String ubicacionGps, String usuarioCreador) {
         this.id = id;
         this.nombre = nombre;
         this.color = color;
         this.informacion = informacion;
         this.ubicacionGps = ubicacionGps;
         this.usuarioCreador = usuarioCreador;
-        this.estado = estado;
     }
 
     /**
@@ -50,10 +47,9 @@ public class Mascota implements Serializable {
         this.informacion = informacion;
         this.ubicacionGps = ubicacionGps;
         this.usuarioCreador = usuarioCreador;
-        this.estado = "activo";
     }
 
-    /** @return id único que tiene la mascota o mas que la mascota el anuncio de esta. */
+    /** @return id único que tiene la mascota. */
     public int getId() {
         return id;
     }
@@ -82,10 +78,4 @@ public class Mascota implements Serializable {
     public String getUsuarioCreador() {
         return usuarioCreador;
     }
-
-    /** @return Estado del reporte (esto es mas que nada para que cuando se elimine no se borre al completo sino que se quede en la base de datos pero en la app no se vea) */
-    public String getEstado() {
-        return estado;
-    }
 }
-

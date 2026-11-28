@@ -49,8 +49,24 @@ public class Usuario {
     }
 
     /**
-     * este es el constructor para poder registrar un nuevo usuario desde la pantalla de registro
-     * por el momento todos son normales, para admin tendria otro metodo, pero aun no hay implementacion, pero hay un admin por default, que es admin y admin123 de contraseña
+     * Constructor para registrar un nuevo usuario con rol específico.
+     *
+     * @param nombre el nombre del nuevo usuario.
+     * @param telefono el teléfono de contacto.
+     * @param password la contraseña elegida.
+     * @param rol el rol seleccionado ("user" o "admin").
+     */
+    public Usuario(String nombre, String telefono, String password, String rol) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.password = password;
+        this.rol = rol;
+        this.estado = "activo";
+    }
+
+    /**
+     * Constructor para poder registrar un nuevo usuario desde la pantalla de registro (por defecto user).
+     * 
      * @param nombre el nombre del nuevo usuario.
      * @param telefono el teléfono de contacto.
      * @param password la contraseña elegida.

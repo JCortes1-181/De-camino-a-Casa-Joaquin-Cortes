@@ -57,11 +57,10 @@ public class Inicio_De_Sesion extends AppCompatActivity {
 
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(Inicio_De_Sesion.this, "Por favor ingresa un usuario y una contraseña", Toast.LENGTH_SHORT).show();
-            } else if (("joaquin".equalsIgnoreCase(username) && "12345".equals(password)) || usuarioDB.validarUsuario(username, password)) {
+            } else if (usuarioDB.validarUsuario(username, password)) {
                 Toast.makeText(Inicio_De_Sesion.this, "Bienvenido", Toast.LENGTH_SHORT).show();
-                /** por ahora este es mi unico admin aun no hay una funcion para decidir quien es admin o no */
                 Usuario u = usuarioDB.obtenerUsuarioPorNombre(username);
-                if (("admin".equalsIgnoreCase(username) && "admin123".equals(password)) || (u != null && "admin".equalsIgnoreCase(u.getRol()))) {
+                if (u != null && "admin".equalsIgnoreCase(u.getRol())) {
                     Intent intent = new Intent(Inicio_De_Sesion.this, AdminActivity.class);
                     startActivity(intent);
                     finish();

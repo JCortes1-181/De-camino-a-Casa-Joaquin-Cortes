@@ -2,7 +2,11 @@ package com.example.decaminoacasa;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,26 +20,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.decaminoacasa.DB.Clases.Anuncio;
 import com.example.decaminoacasa.DB.Clases.Mascota;
+import com.example.decaminoacasa.DB.Modelo.AnuncioDB;
 import com.example.decaminoacasa.DB.Modelo.MascotaDB;
 
 import java.util.List;
+import java.util.Locale;
 
-/**
- * Pantalla principal de la aplicación donde se ven las alertas de mascotas perdidas,
- * permitiendo navegar al perfil, agregar nuevos reportes o ver los avisos existentes.
- */
 public class Pantalla_inicio extends AppCompatActivity {
 
     private MascotaDB mascotaDB;
+    private AnuncioDB anuncioDB;
     private String username;
+    private EditText etSearch;
 
-    /**
-     * Se ejecuta al crear la activity, iniciando los componentes visuales, recuperando el usuario
-     * en sesión, configurando los botones de la barra de navegación y cargando los reportes activos.
-     *
-     * @param savedInstanceState Estado guardado anterior de la activity.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +51,7 @@ public class Pantalla_inicio extends AppCompatActivity {
         String finalUsername = username;
 
         mascotaDB = new MascotaDB(this);
+        anuncioDB = new AnuncioDB(this);
 
         ImageView ivProfile = findViewById(R.id.iv_profile);
         ivProfile.setOnClickListener(v -> {
@@ -60,71 +60,81 @@ public class Pantalla_inicio extends AppCompatActivity {
             startActivity(intent);
         });
 
-        ImageButton btnLeft = findViewById(R.id.btn_footer_left);
-        ImageButton btnMiddle = findViewById(R.id.btn_footer_middle);
-        ImageButton btnRight = findViewById(R.id.btn_footer_right);
+        etSearch = findViewById(R.id.et_search);
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-        btnLeft.setOnClickListener(v -> Toast.makeText(this, "Ubicación", Toast.LENGTH_SHORT).show());
-        btnMiddle.setOnClickListener(v -> Toast.makeText(this, "Pantalla de inicio", Toast.LENGTH_SHORT).show());
-        btnRight.setOnClickListener(v -> {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                cargarMascotas(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        ImageButton btnHome = findViewById(R.id.btn_footer_home);
+        ImageButton btnAdd = findViewById(R.id.btn_footer_add);
+
+        btnHome.setOnClickListener(v -> {
+            etSearch.setText("");
+            cargarMascotas("");
+            Toast.makeText(this, "Pantalla de inicio", Toast.LENGTH_SHORT).show();
+        });
+
+        btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(Pantalla_inicio.this, AgregarMascotaActivity.class);
             intent.putExtra("username", finalUsername);
             startActivityForResult(intent, 100);
         });
 
-        cargarMascotas();
+        cargarMascotas("");
     }
 
-    /**
-     * Se ejecuta al reanudar la activity, asegurando que la lista de mascotas en el feed se mantenga actualizada en cualquier momento.
-     */
     @Override
     protected void onResume() {
         super.onResume();
-        cargarMascotas();
+        String query = etSearch != null ? etSearch.getText().toString() : "";
+        cargarMascotas(query);
     }
 
-    /**
-     * Maneja el resultado devuelto por activities,
-     * recargando el feed si el registro fue exitoso.
-     *
-     * @param requestCode Código de solicitud enviado originalmente.
-     * @param resultCode Código de resultado devuelto por la activity.
-     * @param data Intent que contiene los datos adicionales.
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK) {
-            cargarMascotas();
+            String query = etSearch != null ? etSearch.getText().toString() : "";
+            cargarMascotas(query);
         }
     }
 
-    /**
-     * Carga de forma dinamica desde la base de datos todas los reportes con activos,
-     * creando unas tarjetas visuales con sus datos e implementando clics para ver detalles o gestionar la eliminación.
-     */
-    private void cargarMascotas() {
+    private void cargarMascotas(String query) {
         LinearLayout container = findViewById(R.id.container_pets);
         container.removeAllViews();
 
-        List<Mascota> mascotas = mascotaDB.obtenerMascotasActivas();
-        for (Mascota mascota : mascotas) {
-            View card = getLayoutInflater().inflate(android.R.layout.simple_list_item_2, container, false);
-            TextView text1 = card.findViewById(android.R.id.text1);
-            TextView text2 = card.findViewById(android.R.id.text2);
+        List<Anuncio> anuncios = anuncioDB.obtenerAnunciosActivos();
+        for (Anuncio anuncio : anuncios) {
+            Mascota mascota = mascotaDB.obtenerMascotaPorId(anuncio.getMascotaId());
+            if (mascota == null) continue;
 
-            text1.setText(mascota.getNombre() + " (" + mascota.getColor() + ") - Creado por: " + mascota.getUsuarioCreador());
-            text2.setText(mascota.getUbicacionGps());
+            // Apply search filter (only by pet name)
+            if (query != null && !query.trim().isEmpty()) {
+                String q = query.toLowerCase(Locale.getDefault());
+                boolean matches = mascota.getNombre().toLowerCase(Locale.getDefault()).contains(q);
+                if (!matches) continue;
+            }
 
-            card.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 0, 0, 16);
-            card.setLayoutParams(params);
-            card.setPadding(24, 24, 24, 24);
+            View card = getLayoutInflater().inflate(R.layout.item_mascota_card, container, false);
+            TextView tvName = card.findViewById(R.id.tv_card_name);
+            TextView tvColor = card.findViewById(R.id.tv_card_color);
+            TextView tvLocation = card.findViewById(R.id.tv_card_location);
+            TextView tvCreator = card.findViewById(R.id.tv_card_creator);
+            Button btnDeleteAd = card.findViewById(R.id.btn_delete_ad);
+
+            tvName.setText("🐾 " + mascota.getNombre());
+            tvColor.setText(mascota.getColor());
+            tvLocation.setText("📍 " + mascota.getUbicacionGps() + " (" + anuncio.getHora() + ")");
+            tvCreator.setText("👤 Publicado por: " + mascota.getUsuarioCreador());
 
             card.setOnClickListener(v -> {
                 Intent intent = new Intent(Pantalla_inicio.this, DetalleMascotaActivity.class);
@@ -132,27 +142,28 @@ public class Pantalla_inicio extends AppCompatActivity {
                 startActivity(intent);
             });
 
-            card.setOnLongClickListener(v -> {
-                if (username.equalsIgnoreCase(mascota.getUsuarioCreador()) || username.equalsIgnoreCase("admin")) {
+            if (username.equalsIgnoreCase(mascota.getUsuarioCreador()) || username.equalsIgnoreCase("admin")) {
+                btnDeleteAd.setVisibility(View.VISIBLE);
+                btnDeleteAd.setOnClickListener(v -> {
                     new AlertDialog.Builder(this)
-                            .setTitle("Gestionar Aviso")
-                            .setMessage("¿Deseas quitar este aviso de mascota?")
-                            .setPositiveButton("Sí, quitar", (dialog, which) -> {
-                                boolean des = mascotaDB.desactivarMascota(mascota.getId());
-                                if (des) {
-                                    Toast.makeText(this, "Que tu mascota se haya encontrado con exito", Toast.LENGTH_SHORT).show();
-                                    cargarMascotas();
-                                } else {
-                                    Toast.makeText(this, "Error al desactivar el aviso", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setNegativeButton("Cancelar", null)
-                            .show();
-                } else {
-                    Toast.makeText(this, "opcion a quitar, solo el usuario que lo creo deberia poder acceder a esto", Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            });
+                        .setTitle("Quitar Aviso")
+                        .setMessage("¿Deseas quitar este anuncio de mascota?")
+                        .setPositiveButton("Sí, quitar", (dialog, which) -> {
+                            boolean des = anuncioDB.desactivarAnuncio(anuncio.getId());
+                            if (des) {
+                                Toast.makeText(this, "Anuncio quitado con éxito", Toast.LENGTH_SHORT).show();
+                                String currentQuery = etSearch != null ? etSearch.getText().toString() : "";
+                                cargarMascotas(currentQuery);
+                            } else {
+                                Toast.makeText(this, "Error al quitar el anuncio", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+                });
+            } else {
+                btnDeleteAd.setVisibility(View.GONE);
+            }
 
             container.addView(card);
         }

@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.decaminoacasa.DB.Clases.Mascota;
+import com.example.decaminoacasa.DB.Modelo.AnuncioDB;
 import com.example.decaminoacasa.DB.Modelo.MascotaDB;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,10 +26,6 @@ import com.google.android.gms.location.Priority;
 
 import java.util.Locale;
 
-/**
- * esta es la pantalla encargada de registrar una nueva mascota perdida,
- * integrando la captura de ubicación gps y un mapa interactivo con Leaflet, lo ideal es que se puedan agregar imagenes
- */
 public class AgregarMascotaActivity extends AppCompatActivity {
 
     private FusedLocationProviderClient fusedLocationClient;
@@ -40,12 +37,6 @@ public class AgregarMascotaActivity extends AppCompatActivity {
     private double currentLat = -33.4489;
     private double currentLng = -70.6693;
 
-    /**
-     * Inicia la interfaz, utiliza el usuario que este en sesion, configura el WebView del mapa
-     * y habilita los listeners para poder guardar o cancelar el registro.
-     *
-     * @param savedInstanceState Es el estado de guardado previamente de la activity.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,25 +95,23 @@ public class AgregarMascotaActivity extends AppCompatActivity {
                 Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
             } else {
                 Mascota mascota = new Mascota(name, color, info, location, username);
-                boolean guardado = new MascotaDB(this).insertarMascota(mascota);
-                if (guardado) {
-                    Toast.makeText(this, "¡Aviso de mascota guardado en Base de Datos!", Toast.LENGTH_SHORT).show();
+                long mascotaId = new MascotaDB(this).insertarMascota(mascota);
+                if (mascotaId != -1) {
+                    new AnuncioDB(this).insertarAnuncio(username, (int) mascotaId);
+                    Toast.makeText(this, "¡Aviso y mascota guardados con éxito!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
                     finish();
                 } else {
-                    Toast.makeText(this, "Error al guardar la mascota", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error al guardar el aviso", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    /**
-     * Comprueba si los permisos de ubicación están concedidos,sino  de lo contrario los solicita al usuario.
-     */
     private void verificarYObtenerUbicacion() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+            
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -131,44 +120,34 @@ public class AgregarMascotaActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Obtiene las coordenadas geográficas  del dispositivo utilizando el servicio de ubicación
-     * por el momento funciona, pero tiene puesta una por defecto una longitud y latitud provicional, porque no puedo probar la app de mi telefono.
-     */
     private void obtenerCoordenadasGps() {
         try {
             fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-                    .addOnSuccessListener(this, location -> {
-                        if (location != null) {
-                            currentLat = location.getLatitude();
-                            currentLng = location.getLongitude();
-                            String gpsStr = String.format(Locale.getDefault(), "Lat: %.4f, Lng: %.4f (GPS Real)", currentLat, currentLng);
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        currentLat = location.getLatitude();
+                        currentLng = location.getLongitude();
+                        String gpsStr = String.format(Locale.getDefault(), "Lat: %.4f, Lng: %.4f (GPS Real)", currentLat, currentLng);
+                        etLocation.setText(gpsStr);
+                        loadPickerMap(currentLat, currentLng);
+                        Toast.makeText(this, "¡Ubicación GPS real obtenida!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        fusedLocationClient.getLastLocation().addOnSuccessListener(this, lastLoc -> {
+                            if (lastLoc != null) {
+                                currentLat = lastLoc.getLatitude();
+                                currentLng = lastLoc.getLongitude();
+                            }
+                            String gpsStr = String.format(Locale.getDefault(), "Lat: %.4f, Lng: %.4f (GPS)", currentLat, currentLng);
                             etLocation.setText(gpsStr);
                             loadPickerMap(currentLat, currentLng);
-                            Toast.makeText(this, "¡Ubicación GPS real obtenida!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            fusedLocationClient.getLastLocation().addOnSuccessListener(this, lastLoc -> {
-                                if (lastLoc != null) {
-                                    currentLat = lastLoc.getLatitude();
-                                    currentLng = lastLoc.getLongitude();
-                                }
-                                String gpsStr = String.format(Locale.getDefault(), "Lat: %.4f, Lng: %.4f (GPS)", currentLat, currentLng);
-                                etLocation.setText(gpsStr);
-                                loadPickerMap(currentLat, currentLng);
-                            });
-                        }
-                    });
+                        });
+                    }
+                });
         } catch (SecurityException e) {
             loadPickerMap(currentLat, currentLng);
         }
     }
 
-    /**
-     * Carga el mapa interactivo en HTML utilizando Leaflet dentro del WebView.
-     *
-     * @param lat Latitud para centrar el mapa.
-     * @param lng Longitud para centrar el mapa.
-     */
     private void loadPickerMap(double lat, double lng) {
         String htmlMap = "<!DOCTYPE html><html><head>" +
                 "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
@@ -188,16 +167,9 @@ public class AgregarMascotaActivity extends AppCompatActivity {
                 "  window.location.href = 'latlng://' + pos.lat + ',' + pos.lng;" +
                 "});" +
                 "</script></body></html>";
-        wvMapPicker.loadDataWithBaseURL(null, htmlMap, "text/html", "UTF-8", null);
+                wvMapPicker.loadDataWithBaseURL(null, htmlMap, "text/html", "UTF-8", null);
     }
 
-    /**
-     * Maneja la respuesta del usuario con su solicitud de permisos de ubicación en tiempo de ejecución.
-     *
-     * @param requestCode Código de solicitud del permiso.
-     * @param permissions Lista de permisos solicitados.
-     * @param grantResults Resultados de la realizacion de cada permiso.
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         String[] requiredPermissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};

@@ -74,6 +74,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fillViewport="true"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@id/footer_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +88,7 @@
             android:padding="16dp" />
     </ScrollView>
 
-    <!-- Bottom Footer Bar with 3 Buttons -->
+
     <LinearLayout
         android:id="@+id/footer_bar"
         android:layout_width="0dp"
@@ -100,17 +101,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/btn_footer_left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/desc_location"
-            android:src="@drawable/ic_map_pin_dog"
-            app:tint="@color/white" />
-
-        <ImageButton
-            android:id="@+id/btn_footer_middle"
+            android:id="@+id/btn_footer_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -120,13 +111,13 @@
             app:tint="@color/white" />
 
         <ImageButton
-            android:id="@+id/btn_footer_right"
+            android:id="@+id/btn_footer_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/desc_chat"
-            android:src="@drawable/ic_chat"
+            android:src="@android:drawable/ic_input_add"
             app:tint="@color/white" />
 
     </LinearLayout>

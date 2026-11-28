@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -134,10 +135,17 @@ public class AdminActivity extends AppCompatActivity {
         EditText etNombre = view.findViewById(R.id.et_edit_nombre);
         EditText etTelefono = view.findViewById(R.id.et_edit_telefono);
         EditText etPassword = view.findViewById(R.id.et_edit_password);
+        Spinner spinnerEditRole = view.findViewById(R.id.spinner_edit_role);
 
         etNombre.setText(usuario.getNombre());
         etTelefono.setText(usuario.getTelefono());
         etPassword.setText(usuario.getPassword());
+
+        if ("admin".equalsIgnoreCase(usuario.getRol())) {
+            spinnerEditRole.setSelection(1);
+        } else {
+            spinnerEditRole.setSelection(0);
+        }
 
         new AlertDialog.Builder(this)
                 .setTitle("Actualizar Usuario")
@@ -146,11 +154,13 @@ public class AdminActivity extends AppCompatActivity {
                     String nuevoNombre = etNombre.getText().toString().trim();
                     String nuevoTelefono = etTelefono.getText().toString().trim();
                     String nuevaPass = etPassword.getText().toString().trim();
+                    String selectedRoleText = spinnerEditRole.getSelectedItem().toString();
+                    String nuevoRol = selectedRoleText.toLowerCase().contains("administrador") ? "admin" : "user";
 
                     if (nuevoNombre.isEmpty() || nuevoTelefono.isEmpty() || nuevaPass.isEmpty()) {
                         Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
                     } else {
-                        boolean actualizado = usuarioDB.actualizarUsuario(usuario.getId(), nuevoNombre, nuevoTelefono, nuevaPass, usuario.getRol());
+                        boolean actualizado = usuarioDB.actualizarUsuario(usuario.getId(), nuevoNombre, nuevoTelefono, nuevaPass, nuevoRol);
                         if (actualizado) {
                             Toast.makeText(this, "Usuario actualizado con éxito", Toast.LENGTH_SHORT).show();
                             cargarUsuarios();

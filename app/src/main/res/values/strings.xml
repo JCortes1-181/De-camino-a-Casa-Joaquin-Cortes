@@ -11,9 +11,13 @@
     <string name="welcome_back">Bienvenido</string>
     <string name="back_button">Volver</string>
     <string name="help_message">Ayúdanos a volver a casa</string>
-    <string name="search_hint">Ajustar búsqueda</string>
+    <string name="search_hint">Búsqueda</string>
     <string name="profile_desc">Perfil de usuario</string>
     <string name="desc_location">Ubicación</string>
     <string name="desc_search_pet">Buscar mascota</string>
     <string name="desc_chat">Chat</string>
+    <string-array name="roles_array">
+        <item>Usuario</item>
+        <item>Administrador</item>
+    </string-array>
 </resources>
